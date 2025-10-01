@@ -1,10 +1,500 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplikasi Kitab Multi-Religi</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .phone-frame {
+      width: 40vh;
+      height: 80vh;
+      background: #000;
+      border-radius: 40px;
+      padding: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      position: relative;
+    }
+    
+    .phone-notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 30px;
+      background: #000;
+      border-radius: 0 0 20px 20px;
+      z-index: 1001;
+    }
+    
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: #f6f8fb;
+      border-radius: 32px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .phone-screen.dark {
+      background: #0f1724;
+    }
+    
+    :root {
+      --bg: #f6f8fb;
+      --text: #0f1724;
+      --card: #fff;
+      --nav: #fff;
+      --border: #e5e7eb;
+      --primary: #6A4BCF;
+      --secondary: #3A7BD5;
+    }
+    
+    .phone-screen.dark {
+      --bg: #0f1724;
+      --text: #f6f8fb;
+      --card: #1f2937;
+      --nav: #111827;
+      --border: #374151;
+    }
+    
+    .navbar {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      padding: 1rem;
+      color: white;
+    }
+    
+    .navbar-brand {
+      color: #fff !important;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    
+    .content-wrapper {
+      height: calc(100% - 120px);
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    
+    .section {
+      display: none;
+      padding: 1.5rem;
+      min-height: 100%;
+      animation: fadeIn 0.3s ease-in;
+      color: var(--text);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .active-section {
+      display: block;
+    }
+    
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: transform 0.2s;
+    }
+    
+    .card:hover {
+      transform: translateY(-2px);
+    }
+    
+    .xp-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: conic-gradient(var(--primary) 70%, var(--border) 0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 1.5rem auto;
+      position: relative;
+    }
+    
+    .xp-circle::before {
+      content: '';
+      width: 95px;
+      height: 95px;
+      border-radius: 50%;
+      background: var(--card);
+      position: absolute;
+    }
+    
+    .xp-circle span {
+      position: relative;
+      z-index: 1;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+      color: white;
+    }
+    
+    .book-card {
+      cursor: pointer;
+    }
+    
+    .book-card i {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .nav-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: var(--nav);
+      border-top: 1px solid var(--border);
+      padding: 0.8rem 0;
+    }
+    
+    .nav-bottom .nav-link {
+      color: #9ca3af;
+      font-size: 1.3rem;
+      transition: color 0.2s;
+      text-decoration: none;
+    }
+    
+    .nav-bottom .nav-link.active {
+      color: var(--primary);
+    }
+    
+    .badge-streak {
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+    
+    .reader {
+      background: var(--card);
+      padding: 1.2rem;
+      border-radius: 16px;
+      line-height: 1.8;
+      border: 1px solid var(--border);
+    }
+    
+    .form-control {
+      background: var(--card);
+      border: 2px solid var(--border);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 0.7rem;
+    }
+    
+    .profile-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 4px solid var(--primary);
+    }
+    
+    .setting-item {
+      padding: 0.8rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .setting-item i {
+      margin-right: 0.6rem;
+      color: var(--primary);
+    }
+    
+    .module-card {
+      margin-bottom: 0.8rem;
+    }
+    
+    .module-card h6 {
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      font-size: 0.95rem;
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+  </style>
+</head>
 <body>
 
+<div class="phone-frame">
+  <div class="phone-notch"></div>
+  <div class="phone-screen" id="phoneScreen">
+    
+    <nav class="navbar">
+      <div class="container-fluid">
+        <a class="navbar-brand"><i class="fas fa-book-open me-2"></i>Kitab Multi-Religi</a>
+      </div>
+    </nav>
+
+    <div class="content-wrapper">
+      <!-- HOME -->
+      <div id="home" class="section active-section text-center">
+        <h4 class="mb-3 fw-bold">Selamat Datang<br>Kelompok 17</h4>
+        <div class="xp-circle">
+          <span>340 XP</span>
+        </div>
+        <p class="fs-6 mb-1"><strong>Level 3</strong></p>
+        <span class="badge-streak"><i class="fas fa-fire"></i> Streak 5 Hari</span>
+        <div class="mt-3">
+          <button class="btn btn-primary">
+            <i class="fas fa-play me-2"></i>Mulai Belajar
+          </button>
+        </div>
+      </div>
+
+      <!-- LIBRARY -->
+      <div id="library" class="section">
+        <h5 class="mb-3 fw-bold">Perpustakaan Kitab Suci</h5>
+        <div class="row g-2">
+          <div class="col-6">
+            <div class="card p-3 text-center book-card" onclick="showSection('reader')">
+              <i class="fa-solid fa-moon text-success"></i>
+              <h6 class="mt-2 fw-bold mb-1">Al-Quran</h6>
+              <p class="small text-muted mb-2">114 Surah</p>
+              <button class="btn btn-sm btn-success">Baca</button>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card p-3 text-center book-card">
+              <i class="fa-solid fa-cross text-danger"></i>
+              <h6 class="mt-2 fw-bold mb-1">Alkitab</h6>
+              <p class="small text-muted mb-2">66 Kitab</p>
+              <button class="btn btn-sm btn-danger">Baca</button>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card p-3 text-center book-card">
+              <i class="fa-solid fa-om text-warning"></i>
+              <h6 class="mt-2 fw-bold mb-1">Weda</h6>
+              <p class="small text-muted mb-2">4 Weda</p>
+              <button class="btn btn-sm btn-warning">Baca</button>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card p-3 text-center book-card">
+              <i class="fa-solid fa-dharmachakra text-info"></i>
+              <h6 class="mt-2 fw-bold mb-1">Tripitaka</h6>
+              <p class="small text-muted mb-2">3 Pitaka</p>
+              <button class="btn btn-sm btn-info">Baca</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- READER -->
+      <div id="reader" class="section">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold mb-0">Baca Kitab</h5>
+          <button class="btn btn-sm btn-outline-secondary" onclick="showSection('library')">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+        </div>
+        <div class="reader">
+          <h6 class="text-success mb-2"><i class="fas fa-moon me-2"></i>Al-Quran</h6>
+          <p class="fw-bold text-primary mb-3 small">Surah Al-Fatihah</p>
+          <div style="font-size: 0.9rem; line-height: 1.7;">
+            <p>1. Dengan nama Allah Yang Maha Pengasih, Maha Penyayang.</p>
+            <p>2. Segala puji bagi Allah, Tuhan semesta alam.</p>
+            <p>3. Maha Pengasih, Maha Penyayang.</p>
+            <p>4. Pemilik hari pembalasan.</p>
+            <p>5. Hanya kepada-Mu kami menyembah dan hanya kepada-Mu kami mohon pertolongan.</p>
+            <p>6. Tunjukilah kami jalan yang lurus.</p>
+            <p>7. (Yaitu) jalan orang-orang yang telah Engkau beri nikmat kepadanya.</p>
+          </div>
+          <div class="d-flex justify-content-between mt-3 pt-3 border-top">
+            <button class="btn btn-sm btn-outline-primary">
+              <i class="far fa-bookmark"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-primary">
+              <i class="far fa-note-sticky"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-primary">
+              <i class="fas fa-text-height"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEARN -->
+      <div id="learn" class="section">
+        <h5 class="mb-3 fw-bold">Belajar Interaktif</h5>
+        <div class="card p-3 module-card">
+          <h6><i class="fas fa-heart me-2"></i>Nilai Kemanusiaan</h6>
+          <p class="text-muted mb-2 small">Modul tentang kasih sayang & toleransi antar umat beragama.</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <small class="text-muted"><i class="fas fa-clock me-1"></i>15 menit</small>
+            <button class="btn btn-success btn-sm">Mulai</button>
+          </div>
+        </div>
+        <div class="card p-3 module-card">
+          <h6><i class="fas fa-hands-praying me-2"></i>Doa & Tafsir</h6>
+          <p class="text-muted mb-2 small">Pelajari doa-doa penting beserta penjelasan dan maknanya.</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <small class="text-muted"><i class="fas fa-clock me-1"></i>20 menit</small>
+            <button class="btn btn-success btn-sm">Mulai</button>
+          </div>
+        </div>
+        <div class="card p-3 module-card">
+          <h6><i class="fas fa-landmark me-2"></i>Sejarah Agama</h6>
+          <p class="text-muted mb-2 small">Mengenal perjalanan sejarah dan perkembangan agama.</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <small class="text-muted"><i class="fas fa-clock me-1"></i>30 menit</small>
+            <button class="btn btn-success btn-sm">Mulai</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEARCH -->
+      <div id="search" class="section">
+        <h5 class="mb-3 fw-bold">Pencarian</h5>
+        <input type="text" class="form-control mb-3" placeholder="Cari kitab, ayat, atau topik...">
+        <h6 class="text-muted mb-2 small">Hasil Pencarian</h6>
+        <div class="card p-2 mb-2">
+          <div class="d-flex">
+            <i class="fas fa-cross text-danger me-2 mt-1"></i>
+            <div>
+              <h6 class="mb-1 small">Alkitab - Yohanes 1:1</h6>
+              <p class="mb-0 text-muted" style="font-size: 0.75rem;">Pada mulanya adalah Firman; Firman itu bersama-sama dengan Allah...</p>
+            </div>
+          </div>
+        </div>
+        <div class="card p-2 mb-2">
+          <div class="d-flex">
+            <i class="fas fa-moon text-success me-2 mt-1"></i>
+            <div>
+              <h6 class="mb-1 small">Al-Quran - QS. Al-Baqarah 2:255</h6>
+              <p class="mb-0 text-muted" style="font-size: 0.75rem;">Ayat Kursi - Allah, tidak ada Tuhan selain Dia. Yang Mahahidup...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROFILE -->
+      <div id="profile" class="section text-center">
+        <img src="https://ui-avatars.com/api/?name=User&background=6A4BCF&color=fff&size=80" class="profile-img mb-2" alt="User">
+        <h5 class="fw-bold">Kelompok 17</h5>
+        <p class="text-muted small">Level 3 • 340 XP</p>
+        <span class="badge-streak"><i class="fas fa-fire"></i> Streak 5 Hari</span>
+        
+        <div class="card p-0 mt-3 text-start">
+          <div class="p-2 bg-light rounded-top">
+            <h6 class="mb-0 fw-bold small"><i class="fas fa-cog me-2"></i>Pengaturan</h6>
+          </div>
+          <div class="setting-item">
+            <div>
+              <i class="fas fa-bell"></i>
+              <span class="small">Pengingat Harian</span>
+            </div>
+            <i class="fas fa-chevron-right text-muted small"></i>
+          </div>
+          <div class="setting-item">
+            <div>
+              <i class="fas fa-language"></i>
+              <span class="small">Bahasa Aplikasi</span>
+            </div>
+            <i class="fas fa-chevron-right text-muted small"></i>
+          </div>
+          <div class="setting-item">
+            <div>
+              <i class="fas fa-moon"></i>
+              <span class="small">Mode Gelap</span>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="darkSwitch" onchange="toggleDarkMode()">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="nav-bottom">
+      <div class="d-flex justify-content-around">
+        <a href="#" class="nav-link active" onclick="showSection('home')" data-section="home">
+          <i class="fa-solid fa-house"></i>
+        </a>
+        <a href="#" class="nav-link" onclick="showSection('library')" data-section="library">
+          <i class="fa-solid fa-book"></i>
+        </a>
+        <a href="#" class="nav-link" onclick="showSection('learn')" data-section="learn">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </a>
+        <a href="#" class="nav-link" onclick="showSection('search')" data-section="search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </a>
+        <a href="#" class="nav-link" onclick="showSection('profile')" data-section="profile">
+          <i class="fa-solid fa-user"></i>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <script>
-     window.location.href = "https://947d2b68-835b-4ca3-b470-8b369c8ed973-00-wk1q44z7vt3n.worf.replit.dev/";
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
+    document.getElementById(id).classList.add('active-section');
+    
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.classList.remove('active');
+      if(link.dataset.section === id) {
+        link.classList.add('active');
+      }
+    });
+    
+    document.querySelector('.content-wrapper').scrollTo(0, 0);
+  }
+
+  function toggleDarkMode() {
+    document.getElementById('phoneScreen').classList.toggle('dark');
+  }
 </script>
 
 </body>
